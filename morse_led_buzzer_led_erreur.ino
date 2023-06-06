@@ -8,39 +8,81 @@ int led5 = 5; // output led erreur on pin 5
 int dashLen = dotLen * 3;    // length of the morse code 'dash'
 
 void setup() {  
-  Serial.begin(9600); 
+  Serial.begin(115200); 
                
 }
 
 void loop()
 { 
-
+  int MAXLEN = 100;
   char inChar = 0;          
   char inData[100] = "";        // data length of 6 characters
   String variable = "";
-  String variable1 = "";
+  String command= "";
+  String val= "";
   int index1 = 0;
+  bool isOk = true;
   if ( Serial.available() > 0 ) {                      // Read from Rx from atmega16
 
-    while (Serial.available() > 0 && index1 < 100)     // read till 6th character
+    while (Serial.available() > 0 && isOk)     // read till 6th character
     {
-      delay(100);
       inChar = Serial.read();      // start reading serilly and save to variable
-      Serial.print(inChar);
-      Serial.println(inChar,DEC);
-      if (inChar=='\0'){Serial.print('a');}
+      delay(100);
+      //Serial.print(inChar);
+      //Serial.print(" ");
+     //Serial.println(inChar,DEC);
       inData[index1] = inChar;
       index1++;
       inData[index1] = '\0';         // Add a null at the end
-
+    if (index1>MAXLEN){
+      isOk=false;
+      callerror("trop de carractere");
+    }
     }
     variable.toUpperCase();       // convert to uppercase
     for (byte  i = 0 ; i < 100 ; i++) {
       variable.concat(String(inData[i]));    // concat strings
     }
     delay(20);
+    
+    Serial.print("variable");
+  Serial.print(variable);
+
+  
+  for (int i = 0; i < variable.length(); i++) {
+  Serial.println(variable.substring(0,i));
+    if (variable.substring(i, i+1) == ":") {
+    command = variable.substring(0, i);
+    val = variable.substring(i+1);
+    break;
+    }
   }
-  String  stringToMorseCode = String(variable); 
+    Serial.print("comand ");
+    Serial.println(command);
+    Serial.print("val ");
+    Serial.println(val);
+    if (command == "msg"){
+      for (int i = 0; i < val.length(); i++){ 
+      GetChar(val[i]);
+    }
+    }
+  }
+  delay(1000);
+/* if (separator != 0)
+    {
+        // Actually split the string in 2: replace ':' with 0
+        *separator = 0;
+        Serial.println(c
+        int servoId = atoi(command);
+        ++separator;
+        int position = atoi(separator);
+
+        // Do something with servoId and position
+    }
+
+ */
+  
+  /*String  stringToMorseCode = String(variable); 
   Serial.println(stringToMorseCode);                          
   for (int i = 0; i < sizeof(stringToMorseCode) - 1; i++)
   {
@@ -50,13 +92,16 @@ void loop()
   //Serial.println(tmpChar);
   GetChar(tmpChar);
   //if (char stringToMorseCode[]!=)
- }
+ }*/
 }
+  void callerror(String s){
+    Serial.println(s);
+  }
 void MorseDot()
 {
   
   tone(audio8, note, dotLen); // start playing a tone
-  //delay(dotLen);              // hold in this position
+  delay(dotLen);              // hold in this position
   digitalWrite(led12,HIGH);// start turn on led3
   delay(dotLen);
   digitalWrite(led12,LOW);
@@ -65,7 +110,7 @@ void MorseDash()
 {
  
   tone(audio8, note, dashLen);  // start playing a tone
-  //delay(dashLen);               // hold in this position
+  delay(dashLen);               // hold in this position
    digitalWrite(led12,HIGH);
   delay(dashLen);
   digitalWrite(led12,LOW);

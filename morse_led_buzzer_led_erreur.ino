@@ -23,7 +23,7 @@ void loop()
   int index1 = 0;
   bool isOk = true;
   if ( Serial.available() > 0 ) {                      // Read from Rx from atmega16
-
+    
     while (Serial.available() > 0 && isOk)     // read till 6th character
     {
       inChar = Serial.read();      // start reading serilly and save to variable
@@ -63,40 +63,28 @@ void loop()
     Serial.println(val);
     if (command == "msg"){
       for (int i = 0; i < val.length(); i++){ 
-      GetChar(val[i]);
+        GetChar(val[i]);
+      }
     }
+    else if (command == "cls"){
+      clearfault();
+    } 
+    else{
+      callerror("comande inconue");
     }
+
   }
   delay(1000);
-/* if (separator != 0)
-    {
-        // Actually split the string in 2: replace ':' with 0
-        *separator = 0;
-        Serial.println(c
-        int servoId = atoi(command);
-        ++separator;
-        int position = atoi(separator);
-
-        // Do something with servoId and position
-    }
-
- */
   
-  /*String  stringToMorseCode = String(variable); 
-  Serial.println(stringToMorseCode);                          
-  for (int i = 0; i < sizeof(stringToMorseCode) - 1; i++)
-  {
-  char tmpChar = stringToMorseCode[i];
-  tmpChar = toLowerCase(tmpChar); 
- // Serial.print("->");
-  //Serial.println(tmpChar);
-  GetChar(tmpChar);
-  //if (char stringToMorseCode[]!=)
- }*/
 }
-  void callerror(String s){
+
+void callerror(String s){
     Serial.println(s);
+    digitalWrite(led5,HIGH);
   }
+void clearfault(){
+  digitalWrite(led5,LOW); 
+}
 void MorseDot()
 {
   

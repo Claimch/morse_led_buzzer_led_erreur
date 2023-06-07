@@ -1,9 +1,9 @@
 
 char stringToMorseCode[] = "";
-int audio8 = 8;      // output audio on pin 8
+int audio4 = 4;      // output audio on pin 8
 int note = 1200;      // music note/pitch
 int dotLen = 100;     // length of the morse code 'dot'
-int led12 = 12; // output led morse on pin 12
+int led2 = 2; // output led morse on pin 12
 int led5 = 5; // output led erreur on pin 5
 int dashLen = dotLen * 3;    // length of the morse code 'dash'
 
@@ -88,20 +88,20 @@ void clearfault(){
 void MorseDot()
 {
   
-  tone(audio8, note, dotLen); // start playing a tone
+  tone(audio4, note, dotLen); // start playing a tone
   delay(dotLen);              // hold in this position
-  digitalWrite(led12,HIGH);// start turn on led3
+  digitalWrite(led2,HIGH);// start turn on led3
   delay(dotLen);
-  digitalWrite(led12,LOW);
+  digitalWrite(led2,LOW);
 }
 void MorseDash()
 {
  
-  tone(audio8, note, dashLen);  // start playing a tone
+  tone(audio4, note, dashLen);  // start playing a tone
   delay(dashLen);               // hold in this position
-   digitalWrite(led12,HIGH);
+   digitalWrite(led2,HIGH);
   delay(dashLen);
-  digitalWrite(led12,LOW);
+  digitalWrite(led2,LOW);
 }
 
 void GetChar(char tmpChar)
